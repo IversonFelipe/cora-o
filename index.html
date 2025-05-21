@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Para o Amor da Minha Vida</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #000; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    let renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    let geometry = new THREE.Shape();
+    geometry.moveTo(0, 0);
+    geometry.bezierCurveTo(0, 5, -5, 5, -5, 0);
+    geometry.bezierCurveTo(-5, -5, 0, -5, 0, -10);
+    geometry.bezierCurveTo(0, -5, 5, -5, 5, 0);
+    geometry.bezierCurveTo(5, 5, 0, 5, 0, 0);
+
+    let heartShape = new THREE.ShapeGeometry(geometry);
+    let material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    let heart = new THREE.Mesh(heartShape, material);
+    scene.add(heart);
+
+    camera.position.z = 20;
+
+    let scale = 1;
+    let direction = 1;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      scale += 0.01 * direction;
+      if (scale > 1.2 || scale < 1) direction *= -1;
+      heart.scale.set(scale, scale, scale);
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('touchstart', () => {
+      scene.remove(heart);
+      let text = document.createElement('div');
+      text.innerHTML = "<h1 style='color:white; text-align:center; font-family:sans-serif;'>EU TE AMO</h1>";
+      text.style.position = 'absolute';
+      text.style.top = '40%';
+      text.style.width = '100%';
+      document.body.appendChild(text);
+    });
+  </script>
+</body>
+</html>
